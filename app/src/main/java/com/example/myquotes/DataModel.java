@@ -5,9 +5,15 @@ import java.util.List;
 
 public class DataModel {
     //Template for data
-    private ArrayList<DataModel> results;
+   private String id;
+   private String name;
 
-    public ArrayList<DataModel> getResults() {
-        return results;
+   //Getters
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

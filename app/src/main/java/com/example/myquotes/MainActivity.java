@@ -1,12 +1,16 @@
 package com.example.myquotes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,48 +21,40 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView txt;
+    RecyclerView recyclerView;
+    List<DataModel> dataList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        txt=findViewById(R.id.b);
+        recyclerView=findViewById(R.id.recyclerView);
+        dataList=new ArrayList<>();
         //Retrofit builder
         Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl("https://api.quotable.io/")
+                .baseUrl("https://run.mocky.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         //Instance for interface
-        MyAPICall MyAPICall=retrofit.create(MyAPICall.class);
-        Call<DataModel> call=MyAPICall.getData();
-        call.enqueue(new Callback<DataModel>() {
+        MovieAPI MovieAPI=retrofit.create(MovieAPI.class);
+        Call<JSONResponse> call=MovieAPI.getData();
+        call.enqueue(new Callback<JSONResponse>() {
             @Override
-            public void onResponse(Call<DataModel> call, Response<DataModel> response) {
-                //checking for the response
-                if(response.code()!=200)
-                {
-                    txt.setText("Check the connection");
-                    return;
-                }
-                //get the data into textview
-                ArrayList<DataModel> s=response.body().getResults();
-                String s1="";
-                for(DataModel data: s) {
-                    s1+=s.toString();
-                }
-                Log.d("Cool", s1);
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+
+                JSONResponse jsonResponse= response.body();
+                dataList=new ArrayList<>(Arrays.asList(jsonResponse.getMoviz()));
+                putDataIntoRecyclerView(dataList);
             }
 
             @Override
-            public void onFailure(Call<DataModel> call, Throwable t) {
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
 
             }
         });
-
-
-
-
-
+    }
+    private void putDataIntoRecyclerView(List<DataModel> dataList){
+        Adaptery adaptery=new Adaptery(this,dataList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adaptery);
     }
 }
