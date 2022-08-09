@@ -1,19 +1,16 @@
 package com.example.myquotes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DataModel {
     //Template for data
-   private String id;
-   private String name;
+   private String _id;
+   private String content;
 
    //Getters
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public String getName() {
-        return name;
+    public String getContent() {
+        return content;
     }
 }

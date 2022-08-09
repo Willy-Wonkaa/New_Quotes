@@ -5,9 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         dataList=new ArrayList<>();
         //Retrofit builder
         Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl("https://run.mocky.io/")
+                .baseUrl("https://api.quotable.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         //Instance for interface
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
 
                 JSONResponse jsonResponse= response.body();
-                dataList=new ArrayList<>(Arrays.asList(jsonResponse.getMoviz()));
+                dataList=new ArrayList<>(Arrays.asList(jsonResponse.getResults()));
                 putDataIntoRecyclerView(dataList);
             }
 
